@@ -5,4 +5,6 @@ import dev.vatsal.ecomstorespring.models.Product;
 
 public interface ProductService {
     GenericProductDTO getProductById(Long id);
+
+    GenericProductDTO createProduct(GenericProductDTO genericProductDTO);
 }

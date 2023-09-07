@@ -38,8 +38,8 @@ public class ProductController {
         return productService.getProductById(id);
     }
     @PostMapping
-    public void createProduct(){
-
+    public GenericProductDTO createProduct(@RequestBody GenericProductDTO genericProductDTO){
+        return productService.createProduct(genericProductDTO);
     }
     @PutMapping("/{id}")
     public void updateProductById(){

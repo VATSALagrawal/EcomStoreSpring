@@ -1,5 +1,6 @@
 package dev.vatsal.ecomstorespring.services;
 
+import dev.vatsal.ecomstorespring.Exceptions.NotFoundException;
 import dev.vatsal.ecomstorespring.dtos.FakeStoreProductDTO;
 import dev.vatsal.ecomstorespring.dtos.GenericProductDTO;
 import dev.vatsal.ecomstorespring.models.Product;
@@ -25,8 +26,10 @@ public class FakeStoreProductService implements ProductService{
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
-    public GenericProductDTO convertFakeStoreProductDTOtoGenericProductDTO(FakeStoreProductDTO fakeStoreProductDTO){
-        if(fakeStoreProductDTO==null) return null;
+    public GenericProductDTO convertFakeStoreProductDTOtoGenericProductDTO(FakeStoreProductDTO fakeStoreProductDTO) throws NotFoundException {
+        if(fakeStoreProductDTO==null)
+            throw new NotFoundException("Product with given id not found");
+
         GenericProductDTO product = new GenericProductDTO();
         product.setId(fakeStoreProductDTO.getId());
         product.setImage(fakeStoreProductDTO.getImage());
@@ -37,7 +40,7 @@ public class FakeStoreProductService implements ProductService{
         return product;
     }
     @Override
-    public GenericProductDTO getProductById(Long id) {
+    public GenericProductDTO getProductById(Long id) throws NotFoundException {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDTO> responseEntity = restTemplate.getForEntity(specificProductRequestUrl, FakeStoreProductDTO.class,id);
 
@@ -54,7 +57,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public List<GenericProductDTO> getAllProducts() {
+    public List<GenericProductDTO> getAllProducts() throws NotFoundException {
         RestTemplate restTemplate = restTemplateBuilder.build();
         // Method 1
 //        ResponseEntity<List> response = restTemplate.getForEntity(getAllProductsRequestUrl,List.class);
@@ -75,7 +78,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDTO deleteProductById(Long id) {
+    public GenericProductDTO deleteProductById(Long id) throws NotFoundException {
         RestTemplate restTemplate = restTemplateBuilder.build();
         RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(FakeStoreProductDTO.class);
         ResponseExtractor<ResponseEntity<FakeStoreProductDTO>> responseExtractor = restTemplate.responseEntityExtractor(FakeStoreProductDTO.class);
@@ -84,7 +87,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDTO updateProductById(Long id ,GenericProductDTO genericProductDTO) {
+    public GenericProductDTO updateProductById(Long id ,GenericProductDTO genericProductDTO) throws NotFoundException {
         RestTemplate restTemplate = restTemplateBuilder.build();
         RequestCallback requestCallback = restTemplate.httpEntityCallback(genericProductDTO, FakeStoreProductDTO.class);
         ResponseExtractor<ResponseEntity<FakeStoreProductDTO>> responseExtractor = restTemplate.responseEntityExtractor(FakeStoreProductDTO.class);

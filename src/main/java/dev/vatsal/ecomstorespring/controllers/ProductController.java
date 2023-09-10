@@ -1,5 +1,6 @@
 package dev.vatsal.ecomstorespring.controllers;
 
+import dev.vatsal.ecomstorespring.Exceptions.NotFoundException;
 import dev.vatsal.ecomstorespring.dtos.GenericProductDTO;
 import dev.vatsal.ecomstorespring.models.Product;
 import dev.vatsal.ecomstorespring.services.ProductService;
@@ -30,12 +31,12 @@ public class ProductController {
 //        this.productService = productService;
 //    }
     @GetMapping
-    public List<GenericProductDTO> getAllProducts(){
+    public List<GenericProductDTO> getAllProducts() throws NotFoundException {
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public GenericProductDTO getProductById(@PathVariable("id") Long id){
+    public GenericProductDTO getProductById(@PathVariable("id") Long id) throws NotFoundException {
 
         return productService.getProductById(id);
     }
@@ -44,11 +45,11 @@ public class ProductController {
         return productService.createProduct(genericProductDTO);
     }
     @PutMapping("/{id}")
-    public GenericProductDTO updateProductById(@PathVariable("id") Long id,@RequestBody GenericProductDTO genericProductDTO){
+    public GenericProductDTO updateProductById(@PathVariable("id") Long id,@RequestBody GenericProductDTO genericProductDTO) throws NotFoundException {
         return productService.updateProductById(id,genericProductDTO);
     }
     @DeleteMapping("/{id}")
-    public GenericProductDTO deleteProductById(@PathVariable("id") Long id){
+    public GenericProductDTO deleteProductById(@PathVariable("id") Long id) throws NotFoundException {
         return productService.deleteProductById(id);
     }
 }

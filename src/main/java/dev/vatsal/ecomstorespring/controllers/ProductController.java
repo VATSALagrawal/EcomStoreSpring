@@ -44,8 +44,8 @@ public class ProductController {
         return productService.createProduct(genericProductDTO);
     }
     @PutMapping("/{id}")
-    public void updateProductById(){
-
+    public GenericProductDTO updateProductById(@PathVariable("id") Long id,@RequestBody GenericProductDTO genericProductDTO){
+        return productService.updateProductById(id,genericProductDTO);
     }
     @DeleteMapping("/{id}")
     public GenericProductDTO deleteProductById(@PathVariable("id") Long id){

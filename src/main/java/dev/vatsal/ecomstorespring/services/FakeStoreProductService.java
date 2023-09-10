@@ -82,4 +82,13 @@ public class FakeStoreProductService implements ProductService{
         ResponseEntity<FakeStoreProductDTO> response = restTemplate.execute(specificProductRequestUrl, HttpMethod.DELETE, requestCallback, responseExtractor, id);
         return convertFakeStoreProductDTOtoGenericProductDTO(response.getBody());
     }
+
+    @Override
+    public GenericProductDTO updateProductById(Long id ,GenericProductDTO genericProductDTO) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(genericProductDTO, FakeStoreProductDTO.class);
+        ResponseExtractor<ResponseEntity<FakeStoreProductDTO>> responseExtractor = restTemplate.responseEntityExtractor(FakeStoreProductDTO.class);
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.execute(specificProductRequestUrl, HttpMethod.PUT, requestCallback, responseExtractor, id);
+        return convertFakeStoreProductDTOtoGenericProductDTO(response.getBody());
+    }
 }

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ControllerAdvices {
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleNotFoundException(NotFoundException ex){
-        ResponseEntity<ErrorResponseDTO> responseEntity = new ResponseEntity<>(new ErrorResponseDTO(HttpStatus.NOT_FOUND,ex.getMessage()),HttpStatus.NOT_FOUND);
-        return responseEntity;
-    }
+//    @ExceptionHandler(NotFoundException.class)
+//    public ResponseEntity<ErrorResponseDTO> handleNotFoundException(NotFoundException ex){
+//        ResponseEntity<ErrorResponseDTO> responseEntity = new ResponseEntity<>(new ErrorResponseDTO(HttpStatus.NOT_FOUND,ex.getMessage()),HttpStatus.NOT_FOUND);
+//        return responseEntity;
+//    }
 }

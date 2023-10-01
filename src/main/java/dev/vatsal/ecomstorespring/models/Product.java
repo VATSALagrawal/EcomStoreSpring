@@ -1,8 +1,6 @@
 package dev.vatsal.ecomstorespring.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -16,8 +14,10 @@ public class Product extends BaseModel{
     private String description;
     private String image;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn(name="category") // name the column in table
     private Category category;
 
-    private double price;
+    @OneToOne(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
+    private Price price;
 }

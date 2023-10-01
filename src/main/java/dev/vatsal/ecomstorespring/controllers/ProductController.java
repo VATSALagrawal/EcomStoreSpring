@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -21,7 +22,7 @@ public class ProductController {
     // constructor Injection
     private ProductService productService;
     @Autowired
-    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
+    public ProductController(@Qualifier("selfProductServiceImpl") ProductService productService){
         this.productService = productService;
     }
 
@@ -36,7 +37,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public GenericProductDTO getProductById(@PathVariable("id") Long id) throws NotFoundException {
+    public GenericProductDTO getProductById(@PathVariable("id") UUID id) throws NotFoundException {
 
         return productService.getProductById(id);
     }
@@ -45,11 +46,11 @@ public class ProductController {
         return productService.createProduct(genericProductDTO);
     }
     @PutMapping("/{id}")
-    public GenericProductDTO updateProductById(@PathVariable("id") Long id,@RequestBody GenericProductDTO genericProductDTO) throws NotFoundException {
+    public GenericProductDTO updateProductById(@PathVariable("id") UUID id,@RequestBody GenericProductDTO genericProductDTO) throws NotFoundException {
         return productService.updateProductById(id,genericProductDTO);
     }
     @DeleteMapping("/{id}")
-    public GenericProductDTO deleteProductById(@PathVariable("id") Long id) throws NotFoundException {
+    public GenericProductDTO deleteProductById(@PathVariable("id") UUID id) throws NotFoundException {
         return productService.deleteProductById(id);
     }
 }

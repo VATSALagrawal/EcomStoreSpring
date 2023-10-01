@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("fakeStoreProductService")
-public class FakeStoreProductService implements ProductService{
+public class FakeStoreProductService implements ProductServiceForFakeStore{
 
     private FakeStoreApiAdaptor fakeStoreApiAdaptor;
 

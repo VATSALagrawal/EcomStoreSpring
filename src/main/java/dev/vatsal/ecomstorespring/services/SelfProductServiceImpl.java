@@ -5,6 +5,8 @@ import dev.vatsal.ecomstorespring.dtos.GenericProductDTO;
 import dev.vatsal.ecomstorespring.models.Category;
 import dev.vatsal.ecomstorespring.models.Price;
 import dev.vatsal.ecomstorespring.models.Product;
+import dev.vatsal.ecomstorespring.repositories.CategoryRepository;
+import dev.vatsal.ecomstorespring.repositories.PriceRepository;
 import dev.vatsal.ecomstorespring.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,15 @@ import java.util.UUID;
 public class SelfProductServiceImpl implements ProductService{
 
     ProductRepository productRepository ;
+    private final CategoryRepository categoryRepository;
+    private final PriceRepository priceRepository;
 
-    public SelfProductServiceImpl(ProductRepository productRepository) {
+    public SelfProductServiceImpl(ProductRepository productRepository,
+                                  CategoryRepository categoryRepository,
+                                  PriceRepository priceRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.priceRepository = priceRepository;
     }
 
     public GenericProductDTO convertProductToGenericProductDTO(Product product) {
@@ -47,14 +55,28 @@ public class SelfProductServiceImpl implements ProductService{
     public GenericProductDTO createProduct(GenericProductDTO genericProductDTO) {
 
         Product product = new Product();
-        Category category = new Category();
-        category.setName(genericProductDTO.getCategory());
-        product.setCategory(category);
+        Optional<Category> category = categoryRepository.findDistinctByNameEquals(genericProductDTO.getCategory());
+        Category categoryToSet = new Category();
+        if(category.isEmpty()){
+                categoryToSet.setName(genericProductDTO.getCategory());
+        }
+        else{
+            categoryToSet = category.get();
+        }
+        product.setCategory(categoryToSet);
         product.setTitle(genericProductDTO.getTitle());
         product.setImage(genericProductDTO.getImage());
         product.setDescription(genericProductDTO.getDescription());
-        Price price = new Price("Rupee", genericProductDTO.getPrice());
-        product.setPrice(price);
+        Optional<Price> price = priceRepository.findByPrice(genericProductDTO.getPrice());
+        Price priceToSet = new Price();
+        if(price.isEmpty()){
+            priceToSet.setPrice(genericProductDTO.getPrice());
+            priceToSet.setCurrency("Rupee");
+        }
+        else {
+            priceToSet = price.get();
+        }
+        product.setPrice(priceToSet);
         Product product1 = productRepository.save(product);
         return convertProductToGenericProductDTO(product1);
     }
@@ -97,5 +119,19 @@ public class SelfProductServiceImpl implements ProductService{
         updatedproduct.setPrice(price);
         Product product1 = productRepository.save(updatedproduct);
         return convertProductToGenericProductDTO(product1);
+    }
+
+    @Override
+    public List<GenericProductDTO> getAllProductsWithCategory(UUID category_id) throws NotFoundException {
+        List<GenericProductDTO> genericProductDTOS = new ArrayList<>();
+        Optional<Category> category = categoryRepository.findById(category_id);
+        if(category.isEmpty())
+            throw new NotFoundException("Category with given id not found");
+
+        List<Product> products = productRepository.findAllByCategoryEquals(category.get());
+        for(Product product:products){
+            genericProductDTOS.add(convertProductToGenericProductDTO(product));
+        }
+        return genericProductDTOS;
     }
 }

@@ -2,6 +2,7 @@ package dev.vatsal.ecomstorespring.services;
 
 import dev.vatsal.ecomstorespring.Exceptions.NotFoundException;
 import dev.vatsal.ecomstorespring.dtos.GenericProductDTO;
+import dev.vatsal.ecomstorespring.models.Category;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,4 +20,5 @@ public interface ProductService {
 
     GenericProductDTO updateProductById(UUID id,GenericProductDTO genericProductDTO) throws NotFoundException;
 
+    List<GenericProductDTO> getAllProductsWithCategory(UUID category_id) throws NotFoundException;
 }

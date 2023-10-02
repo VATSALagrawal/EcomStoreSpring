@@ -1,5 +1,6 @@
 package dev.vatsal.ecomstorespring.repositories;
 
+import dev.vatsal.ecomstorespring.models.Category;
 import dev.vatsal.ecomstorespring.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findAllByPrice_CurrencyEquals(String currency);
 
+    List<Product> findAllByCategoryEquals(Category category);
     @Query(value = CustomQueries.FIND_ALL_BY_TITLE,nativeQuery = true) // Native SQL query
     List<Product> findAllByTitle(String parameter);
 
